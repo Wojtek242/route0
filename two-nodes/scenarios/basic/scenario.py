@@ -25,31 +25,43 @@ def scenario():
 
     os.system("rm -f /tmp/R*.log /tmp/R*.pid logs/*")
     os.system("mn -c >/dev/null 2>&1")
-    os.system("killall -9 zebra > /dev/null 2>&1")
+    os.system("killall -9 zebra staticd > /dev/null 2>&1")
 
     net = Mininet(topo=NetTopo(), switch=Router)
     net.start()
-    for router in net.switches:
-        # Enable IP forwarding
-        router.cmd("sysctl -w net.ipv4.ip_forward=1")
-        router.waitOutput()
 
+    for node in net.switches:
         # Start Zebra (routing table daemon)
-        router.cmd("/usr/lib/frr/zebra"
-                   " -f two-nodes/zebra/%s.conf"
-                   " -d"
-                   " -i /tmp/zebra-%s.pid"
-                   " > logs/%s-zebra 2>&1"
-                   % (router.name, router.name, router.name))
-        router.waitOutput()
+        node.cmd("/usr/lib/frr/zebra"
+                 " -f two-nodes/zebra/%s.conf"
+                 " -d"
+                 " -i /tmp/%s-zebra.pid"
+                 " > /tmp/%s-zebra.out 2>&1"
+                 % (node.name, node.name, node.name))
+        node.waitOutput()
 
-        # Delete spare loopback address for convenience
-        router.cmd("ip addr del 127.0.0.1/8 dev lo")
-        router.waitOutput()
+        if node.name.startswith('h'):
+            # Start static route daemon
+            node.cmd("/usr/lib/frr/staticd"
+                     " -f two-nodes/staticd/%s.conf"
+                     " -d"
+                     " -i /tmp/%s-staticd.pid"
+                     " > /tmp/%s-staticd.out 2>&1"
+                     % (node.name, node.name, node.name))
+            node.waitOutput()
+
+        if node.name.startswith('R'):
+            # Enable IP forwarding
+            node.cmd("sysctl -w net.ipv4.ip_forward=1")
+            node.waitOutput()
+
+            # Delete spare loopback address for convenience
+            node.cmd("ip addr del 127.0.0.1/8 dev lo")
+            node.waitOutput()
 
     CLI(net)
     net.stop()
-    os.system("killall -9 zebra")
+    os.system("killall -9 zebra staticd")
 
 
 if __name__ == "__main__":
