@@ -7,7 +7,7 @@ from mininet.net import Mininet
 from mininet.cli import CLI
 
 from router import Router
-from scenario import Scenario
+from experiment import Experiment
 
 
 def start_daemon(node, daemon, conf_dir):
@@ -60,7 +60,7 @@ def run(scenario):
 
     CLI(net)
     net.stop()
-    os.system("killall -9 {}".format(' '.join(daemons)))
+    os.system("killall -9 {} > /dev/null 2>&1".format(' '.join(daemons)))
 
 
 if __name__ == "__main__":
@@ -72,6 +72,6 @@ if __name__ == "__main__":
                         help='the scenario to set up in the network')
     ARGS = parser.parse_args()
 
-    scenario = Scenario(ARGS.topology, ARGS.scenario)
+    experiment = Experiment(ARGS.topology, ARGS.scenario)
 
-    run(scenario)
+    run(experiment)

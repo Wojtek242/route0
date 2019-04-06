@@ -2,10 +2,14 @@ import importlib
 import os
 
 
-class Scenario(object):
-    """Class that describes a network scenario.  A scenario defines which nodes
-    are routers and which are hosts as well as which nodes need to start which
-    daemons.
+class Experiment(object):
+    """Class that describes a network experiment.  An experiment is a particular
+    combination of topology and scenario.
+
+    A topology determines the nodes and their links in the network.
+
+    A scenario determines which daemons need to be started on which nodes and
+    the location of the relevant config files.
 
     """
 
