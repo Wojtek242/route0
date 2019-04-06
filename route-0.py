@@ -29,10 +29,16 @@ def run(topo, scenario):
     """Start a network scenario.
     """
 
+    daemons = [
+        "zebra",
+        "staticd",
+        "isisd",
+    ]
+
     os.system("rm -f /tmp/R*.log /tmp/R*.pid /tmp/R*.out")
     os.system("rm -f /tmp/h*.log /tmp/h*.pid /tmp/h*.out")
     os.system("mn -c >/dev/null 2>&1")
-    os.system("killall -9 zebra staticd isisd > /dev/null 2>&1")
+    os.system("killall -9 {} > /dev/null 2>&1".format(' '.join(daemons)))
 
     net = Mininet(topo=topo, switch=Router)
     net.start()
@@ -41,30 +47,25 @@ def run(topo, scenario):
     # WARNING: FRR can get confused unless all daemons on each node are started
     #          together.
     for node in net.switches:
-        if node in scenario.routers:
+        for daemon in daemons:
+            if node in getattr(scenario, daemon):
+                start_deamon(node,
+                             daemon,
+                             getattr(scenario,
+                                     "{}_conf".format(daemon)))
+
+        if node.name.startswith('R'):
             # Enable IP forwarding
             node.cmd("sysctl -w net.ipv4.ip_forward=1")
             node.waitOutput()
-
-        if node in scenario.zebra:
-            # Start Zebra (routing table daemon)
-            start_deamon(node, "zebra", scenario.zebra_conf)
 
             # Delete spare loopback address for convenience
             node.cmd("ip addr del 127.0.0.1/8 dev lo")
             node.waitOutput()
 
-        if node in scenario.staticd:
-            # Start static route daemon
-            start_deamon(node, "staticd", scenario.staticd_conf)
-
-        if node in scenario.isisd:
-            # Start IS-IS daemon
-            start_deamon(node, "isisd", scenario.isisd_conf)
-
     CLI(net)
     net.stop()
-    os.system("killall -9 zebra staticd isisd")
+    os.system("killall -9 {}".format(' '.join(daemons)))
 
 
 if __name__ == "__main__":
