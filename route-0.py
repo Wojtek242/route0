@@ -7,6 +7,7 @@ from mininet.net import Mininet
 from mininet.cli import CLI
 
 from router import Router
+from topology.one_node.topo import NetTopo as OneNode
 from topology.two_nodes.topo import NetTopo as TwoNodes
 from scenario import Basic, Plain
 
@@ -64,6 +65,7 @@ def run(topo, scenario):
 
 if __name__ == "__main__":
     topology = {
+        "one_node": OneNode,
         "two_nodes": TwoNodes,
     }
 

@@ -15,13 +15,11 @@ class NetTopo(Topo):
 
         # Add routers
         r_1 = self.addSwitch('R1')
-        r_2 = self.addSwitch('R2')
 
         # Add hosts
         h_1_1 = self.addSwitch('h1_1')
         h_2_1 = self.addSwitch('h2_1')
 
         # Setup links as shown in README.md
-        self.addLink(r_1, r_2)
         self.addLink(r_1, h_1_1)
-        self.addLink(r_2, h_2_1)
+        self.addLink(r_1, h_2_1)
