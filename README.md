@@ -9,8 +9,8 @@ implementations running on top of a network setup locally using
 
 ### Motivation
 
-Mininet is a great tool for [teaching, learning, and experimenting]
-(https://github.com/mininet/mininet/wiki/Teaching-and-Learning-with-Mininet)
+Mininet is a great tool for [teaching, learning, and
+experimenting](https://github.com/mininet/mininet/wiki/Teaching-and-Learning-with-Mininet)
 with networking.  However, there was no coherent framework or easy to examples
 to follow which would let one use Mininet to setup a network running a bunch of
 routing protocols.  The FRR project actually uses Mininet for running [topology
