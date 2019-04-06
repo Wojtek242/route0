@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import argparse
 import os
 
 from mininet.net import Mininet
@@ -7,7 +8,7 @@ from mininet.cli import CLI
 
 from router import Router
 from topology.two_nodes.topo import NetTopo as TwoNodes
-from scenario import Basic
+from scenario import Basic, Plain
 
 
 def start_deamon(node, daemon, conf_dir):
@@ -62,4 +63,24 @@ def run(topo, scenario):
 
 
 if __name__ == "__main__":
-    run(TwoNodes(), Basic())
+    topology = {
+        "two_nodes": TwoNodes,
+    }
+
+    scenario = {
+        "plain": Plain,
+        "basic": Basic,
+    }
+
+    parser = argparse.ArgumentParser(
+        description='Launch a network scenario Mininet.')
+    parser.add_argument('--topology', type=str, required=True,
+                        choices=topology.keys(),
+                        help='the topology of the network')
+    parser.add_argument('--scenario', type=str, required=True,
+                        choices=scenario.keys(),
+                        help='the scenario to set up in the network')
+
+    args = parser.parse_args()
+    run(topology[args.topology](),
+        scenario[args.scenario]())
