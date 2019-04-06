@@ -9,7 +9,7 @@ from mininet.cli import CLI
 from router import Router
 from topology.one_node.topo import NetTopo as OneNode
 from topology.two_nodes.topo import NetTopo as TwoNodes
-from scenario import Basic, Plain
+from scenario import Basic, Plain, Isis
 
 
 def start_deamon(node, daemon, conf_dir):
@@ -17,7 +17,7 @@ def start_deamon(node, daemon, conf_dir):
 
     """
     node.cmd("/usr/lib/frr/{daemon}"
-             " -f {conf_dir}/{daemon}/{node_name}.conf"
+             " -f {conf_dir}/{node_name}.conf"
              " -d"
              " -i /tmp/{node_name}-{daemon}.pid"
              " > /tmp/{node_name}-{daemon}.out 2>&1"
@@ -32,11 +32,11 @@ def run(topo, scenario):
     os.system("rm -f /tmp/R*.log /tmp/R*.pid /tmp/R*.out")
     os.system("rm -f /tmp/h*.log /tmp/h*.pid /tmp/h*.out")
     os.system("mn -c >/dev/null 2>&1")
-    os.system("killall -9 zebra staticd > /dev/null 2>&1")
+    os.system("killall -9 zebra staticd isisd > /dev/null 2>&1")
 
     net = Mininet(topo=topo, switch=Router)
     net.start()
-    scenario.setup(net)
+    scenario.setup(net, topo.topo_dir)
 
     # WARNING: FRR can get confused unless all daemons on each node are started
     #          together.
@@ -48,7 +48,7 @@ def run(topo, scenario):
 
         if node in scenario.zebra:
             # Start Zebra (routing table daemon)
-            start_deamon(node, "zebra", topo.topo_dir)
+            start_deamon(node, "zebra", scenario.zebra_conf)
 
             # Delete spare loopback address for convenience
             node.cmd("ip addr del 127.0.0.1/8 dev lo")
@@ -56,11 +56,15 @@ def run(topo, scenario):
 
         if node in scenario.staticd:
             # Start static route daemon
-            start_deamon(node, "staticd", topo.topo_dir)
+            start_deamon(node, "staticd", scenario.staticd_conf)
+
+        if node in scenario.isisd:
+            # Start IS-IS daemon
+            start_deamon(node, "isisd", scenario.isisd_conf)
 
     CLI(net)
     net.stop()
-    os.system("killall -9 zebra staticd")
+    os.system("killall -9 zebra staticd isisd")
 
 
 if __name__ == "__main__":
@@ -72,6 +76,7 @@ if __name__ == "__main__":
     scenario = {
         "plain": Plain,
         "basic": Basic,
+        "isis": Isis,
     }
 
     parser = argparse.ArgumentParser(
