@@ -79,6 +79,11 @@ if __name__ == "__main__":
         "isis": Isis,
     }
 
+    supported = {
+        "one_node": set(["plain", "basic"]),
+        "two_nodes": set(["plain", "basic", "isis"]),
+    }
+
     parser = argparse.ArgumentParser(
         description='Launch a network scenario Mininet.')
     parser.add_argument('--topology', type=str, required=True,
@@ -87,7 +92,11 @@ if __name__ == "__main__":
     parser.add_argument('--scenario', type=str, required=True,
                         choices=scenario.keys(),
                         help='the scenario to set up in the network')
+    ARGS = parser.parse_args()
 
-    args = parser.parse_args()
-    run(topology[args.topology](),
-        scenario[args.scenario]())
+    if ARGS.scenario not in supported[ARGS.topology]:
+        raise ValueError("Scenario \"{}\" is not supported for topology \"{}\""
+                         .format(ARGS.scenario, ARGS.topology))
+
+    run(topology[ARGS.topology](),
+        scenario[ARGS.scenario]())
