@@ -62,7 +62,7 @@ other Unix-like systems, but that is undocumented.
 ### Running an experiment
 
 If you just want to get started, choose a topology from the `topology`
-directory, and a `scenario` from that topology directory.  Note that all
+directory, and a scenario from the `scenario` directory within.  Note that all
 topologies support `plain` and `basic` in addition the explicit defined
 scenarios.  The meaning of these special scenarios is explained later on in
 this `README` in the section on scenarios.
@@ -112,7 +112,7 @@ This section will introduce some basic FRR concepts that are in particular
 useful to understand for Route 0.  For more information, please refer to the
 [FRR documentation](http://docs.frrouting.org/en/latest/).
 
-FRR is a set of routing protocols with each run in its own daemon.  In
+FRR is a set of routing protocols with each running in its own daemon.  In
 addition, there is a central IP routing manager, `zebra`, which must be run
 before any other routing daemon is started.  All other routing protocols talk
 to `zebra` which in turn will talk to the operating system kernel to install
