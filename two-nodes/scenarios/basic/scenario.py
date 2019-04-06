@@ -3,33 +3,20 @@
 import os
 import sys
 
-from mininet.topo import Topo
 from mininet.net import Mininet
 from mininet.cli import CLI
 
-sys.path.append(os.path.join(
+topo_dir = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
-    '..'))
+    '../..')
+sys.path.append(topo_dir)
+from topo import NetTopo
+
+root_dir = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)),
+    '../../..')
+sys.path.append(root_dir)
 from router import Router
-
-
-class NetTopo(Topo):
-    """The network topology.
-    """
-
-    def __init__(self):
-        # Add default members to class.
-        super(NetTopo, self).__init__()
-
-        # The topology has one router per AS
-        r_1 = self.addSwitch('R1')
-        r_2 = self.addSwitch('R2')
-
-        # Setup the links as follows:
-        #
-        # R1 --- R2
-        #
-        self.addLink(r_1, r_2)
 
 
 def scenario():
@@ -49,10 +36,10 @@ def scenario():
 
         # Start Zebra (routing table daemon)
         router.cmd("/usr/lib/frr/zebra"
-                   " -f conf/zebra-%s.conf"
+                   " -f two-nodes/zebra/%s.conf"
                    " -d"
                    " -i /tmp/zebra-%s.pid"
-                   " > logs/%s-zebra-stdout 2>&1"
+                   " > logs/%s-zebra 2>&1"
                    % (router.name, router.name, router.name))
         router.waitOutput()
 
