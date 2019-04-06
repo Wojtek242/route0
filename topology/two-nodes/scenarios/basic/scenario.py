@@ -14,7 +14,7 @@ from topo import NetTopo
 
 root_dir = os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
-    '../../..')
+    '../../../..')
 sys.path.append(root_dir)
 from router import Router
 
@@ -23,7 +23,8 @@ def scenario():
     """Start the network scenario.
     """
 
-    os.system("rm -f /tmp/R*.log /tmp/R*.pid logs/*")
+    os.system("rm -f /tmp/R*.log /tmp/R*.pid /tmp/R*.out")
+    os.system("rm -f /tmp/h*.log /tmp/h*.pid /tmp/h*.out")
     os.system("mn -c >/dev/null 2>&1")
     os.system("killall -9 zebra staticd > /dev/null 2>&1")
 
