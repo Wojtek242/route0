@@ -80,11 +80,10 @@ Adding a new topology is straightforward.
 4. Create a `staticd` directory and populate it with configuration files for
    the `staticd` daemon to configure the default routes on hosts.
 5. Create a `README.md` file to describe your topology.
-6. Add your topology to the `route-0.py` file.  By default a topology will
-   support the `plain` and `basic` scenarios.
 
 The easiest way to start would be to copy some other topology and customise it
-as appropriate.
+as appropriate.  Once ready, the topology should be automatically detected by
+`route-0.py` when you pass your topology's name as the `--topology` argument.
 
 ### Adding a new scenario
 
@@ -98,6 +97,9 @@ additional scenarios is also pretty straightforward.
 3. In your new directory create one directory for each daemon you intend to
    run.  You don't need to do this for `zebra` or `staticd` unless you want to
    override the topology defaults.
+   
+Just like with the topology, the main script should automatically pick up the
+new scenario.
 
 ## Name
 
