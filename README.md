@@ -42,6 +42,14 @@ Virtual Machine (VM) image developed specifically for this project.
 
 TODO: INSTRUCTIONS FOR VM IMAGE
 
+Note that the VM does not come with the `route-0` repository.  This is because
+the repository will be updated much more frequently than the VM image.  You
+will still need to clone `route-0` into an appropriate directory on the VM.  To
+do so run
+```
+git clone https://github.com/Wojtek242/route-0.git
+```
+
 If you would prefer to set up your own environment, you can follow these
 [instructions](platform.md).  They describe the steps needed to produce the
 exact same VM image available above.
@@ -53,20 +61,132 @@ other Unix-like systems, but that is undocumented.
 
 ### Running an experiment
 
+If you just want to get started, choose a topology from the `topology`
+directory, and a `scenario` from that topology directory.  Note that all
+topologies support `plain` and `basic` in addition the explicit defined
+scenarios.  The meaning of these special scenarios is explained later on in
+this `README` in the section on scenarios.
+
+Once you have chosen `<topology_name>` and `<scenario_name>` you can run an
+experiment with the following command.
+```
+sudo python route-0.py --topology <topology_name> --scenario <scenario_name>
+```
+
 ### Lessons
+
+TODO: WRITE UP LESSONS
+
+## Mininet Concepts
+
+This section will introduce some basic Mininet concepts that are in particular
+useful for Route 0.  For more information, please refer to the [Mininet
+documentation](https://github.com/mininet/mininet/wiki/Documentation).
+
+Mininet is a framework for creating virtual networks running real kernel,
+switch, and application code.  In Route 0 it is used to provide the
+virtualisation necessary to run multiple routing nodes on a single
+computer. Mininet handles the topology setup before dropping the user in its
+own special CLI.
+
+The CLI is self-documented and help can be accessed by running `help`.  To
+investigate the current topology, you can run `net`.  To visualise the output
+of this command, you can copy and paste it into this [web
+tool](https://achille.github.io/mininet-dump-visualizer/).
+
+A particularly useful feature of the CLI is the ability to run shell commands
+on any of the nodes in the network.  To do this, simply run
+```
+<node_name> <shell_command>
+```
+such as `R1 ifconfig`.  This is particularly useful in Route 0 for commands
+like `ifconfig` or `ip route`.  Additionally, it is possible to use this
+feature to send ping between nodes, for example, `R1 ping 10.0.0.1`.  Normally,
+in Mininet the destination can also be specified using its name.  It is
+possible to do so in Route 0, but this is often ambiguous as routers will have
+multiple IP addresses associated with their interfaces.
+
+## FRR Concepts
+
+This section will introduce some basic FRR concepts that are in particular
+useful to understand for Route 0.  For more information, please refer to the
+[FRR documentation](http://docs.frrouting.org/en/latest/).
+
+FRR is a set of routing protocols with each run in its own daemon.  In
+addition, there is a central IP routing manager, `zebra`, which must be run
+before any other routing daemon is started.  All other routing protocols talk
+to `zebra` which in turn will talk to the operating system kernel to install
+routes as appropriate.
+
+FRR routing protocols are configured using configuration files.  The details of
+how to write these configurations are on the [FRR documentation
+website](http://docs.frrouting.org/en/latest/).  It is also possible to connect
+to running instances of the protocols.  However, this is not currently
+supported in Route 0.
+
+TODO: ADD SUPPORT TO CONNECT TO ROUTING PROTOCOL SHELL
 
 ## Structure
 
-### Topologies
+There are three key concepts in the Route 0 framework: topology, scenario, and
+experiment.
 
-### Scenarios
+### Topology
+
+A topology defines the nodes and links that form the network.  Additionally it
+also determines the default IP address assignments and any static routes which
+are initialised using the `zebra` and `staticd` daemons.
+
+Each topology has its own directory in the `topology` directory.  Every
+topology directory must contain a `topo.py` file which defines a `NetTopo`
+class.  The topology itself is defined in the constructor of this class using
+the [Mininet API](http://mininet.org/api/classmininet_1_1topo_1_1Topo.html).
+
+A `README.md` should be provided with each topology that has a schematic
+diagram of the topology and lists all the default IP address assignments.  It
+is assumed that hosts have a default route setup to the router they connect to
+and that routers do not have default routes.
+
+### Scenario
+
+A scenario is a particular configuration of FRR daemons on the provided
+topology.  While the topology defines which nodes and links form the network,
+the scenario determines which daemons get started on which nodes and their
+configuration.
+
+There are two special scenarios: `plain` and `basic`. The `plain` scenario
+starts the network without any daemons so only the Mininet topology is set up,
+but no IP addresses or default routes are created.  The `basic` scenario
+additionally starts up `zebra` and `staticd` to configure addresses and default
+routes.
+
+Scenarios are defined for a particular topology and thus they can be found in
+the `scenario` directory within the topology directories.  There is no python
+code associated with a scenario, only FRR configuration files.  Each scenario
+(excluding the special ones) should have a directory in the `scenario`
+directory.  Within the particular scenario directory, each daemon that is to be
+run must have a its own directory.  The configuration files should be created
+in the appropriate daemon directory with the name `<node_name>.conf`.
+
+The `zebra` and `staticd` daemons are special and have their own directories
+directly in the topology directory.  If a scenario has its own `zebra` and/or
+`staticd` directory, these will be used preferentially, but otherwise the
+topology's ones will be used.  Note that if no `zebra` and/or `staticd` daemon
+is to be run then the scenario must have empty `zebra` and/or `staticd`
+directories within its scenario directory.
+
+### Experiment
+
+An experiment is simply a particular topology and scenario combination.
+Technically this is redundant since scenarios are strictly associated with only
+one topology, but using different terminology avoids confusion.
 
 ## Contributing
 
 There are many ways to contribute to Route 0.  If you are an expert in
 networking, you can look for and correct errors, improve the existing lessons,
-or add new lessons.  Another way to contribute is to simply add new scenarios
-or topologies that you feel would be interesting for others.
+add new lessons, or add IPv6 support.  Another way to contribute is to simply
+add new scenarios or topologies that you feel would be interesting for others.
 
 ### Adding a new topology
 
