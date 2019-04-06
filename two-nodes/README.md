@@ -12,7 +12,7 @@ h1_1 ---|2 R1 1|------|1 R2 2|--- h2_1
 
 Interface | Name    | Address/Subnet
 ----------|---------|---------------
-          | lo      | 10.0.0.1/32
+0         | lo      | 10.0.0.1/32
 1         | R1-eth1 | 10.0.1.1/24
 2         | R1-eth2 | 10.1.0.254/24
 
@@ -20,7 +20,7 @@ Interface | Name    | Address/Subnet
 
 Interface | Name    | Address/Subnet
 ----------|---------|---------------
-          | lo      | 10.0.0.2/32
+0         | lo      | 10.0.0.2/32
 1         | R2-eth1 | 10.0.1.2/24
 2         | R2-eth2 | 10.2.0.254/24
 
@@ -28,10 +28,10 @@ Interface | Name    | Address/Subnet
 
 Interface | Name      | Address/Subnet
 ----------|-----------|---------------
-          | h1_1-eth1 | 10.1.0.1/24
+1         | h1_1-eth1 | 10.1.0.1/24
 
 ## h2_1
 
 Interface | Name      | Address/Subnet
 ----------|-----------|---------------
-          | h2_1-eth1 | 10.2.0.1/24
+1         | h2_1-eth1 | 10.2.0.1/24
