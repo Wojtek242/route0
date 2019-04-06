@@ -10,6 +10,19 @@ from topology.two_nodes.topo import NetTopo as TwoNodes
 from scenario import Basic
 
 
+def start_deamon(node, daemon, conf_dir):
+    """Start one FRR daemon on a given node.
+
+    """
+    node.cmd("/usr/lib/frr/{daemon}"
+             " -f {conf_dir}/{daemon}/{node_name}.conf"
+             " -d"
+             " -i /tmp/{node_name}-{daemon}.pid"
+             " > /tmp/{node_name}-{daemon}.out 2>&1"
+             .format(daemon=daemon, conf_dir=conf_dir, node_name=node.name))
+    node.waitOutput()
+
+
 def run(topo, scenario):
     """Start a network scenario.
     """
@@ -33,13 +46,7 @@ def run(topo, scenario):
 
         if node in scenario.zebra:
             # Start Zebra (routing table daemon)
-            node.cmd("/usr/lib/frr/zebra"
-                     " -f %s/zebra/%s.conf"
-                     " -d"
-                     " -i /tmp/%s-zebra.pid"
-                     " > /tmp/%s-zebra.out 2>&1"
-                     % (topo.topo_dir, node.name, node.name, node.name))
-            node.waitOutput()
+            start_deamon(node, "zebra", topo.topo_dir)
 
             # Delete spare loopback address for convenience
             node.cmd("ip addr del 127.0.0.1/8 dev lo")
@@ -47,13 +54,7 @@ def run(topo, scenario):
 
         if node in scenario.staticd:
             # Start static route daemon
-            node.cmd("/usr/lib/frr/staticd"
-                     " -f %s/staticd/%s.conf"
-                     " -d"
-                     " -i /tmp/%s-staticd.pid"
-                     " > /tmp/%s-staticd.out 2>&1"
-                     % (topo.topo_dir, node.name, node.name, node.name))
-            node.waitOutput()
+            start_deamon(node, "staticd", topo.topo_dir)
 
     CLI(net)
     net.stop()
