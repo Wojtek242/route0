@@ -1,5 +1,6 @@
 import importlib
 import os
+import sys
 
 
 class Experiment(object):
@@ -14,7 +15,7 @@ class Experiment(object):
     """
 
     def __init__(self, topology, scenario):
-        root_dir = os.path.dirname(os.path.realpath(__file__))
+        root_dir = os.path.dirname(sys.modules['__main__'].__file__)
 
         # Check if the topology directory exists.
         topo_dir = os.path.join(root_dir, "topology/{}".format(topology))
