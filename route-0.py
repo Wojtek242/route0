@@ -12,7 +12,7 @@ from topology.two_nodes.topo import NetTopo as TwoNodes
 from scenario import Basic, Plain, Isis
 
 
-def start_deamon(node, daemon, conf_dir):
+def start_daemon(node, daemon, conf_dir):
     """Start one FRR daemon on a given node.
 
     """
@@ -49,10 +49,8 @@ def run(topo, scenario):
     for node in net.switches:
         for daemon in daemons:
             if node in getattr(scenario, daemon):
-                start_deamon(node,
-                             daemon,
-                             getattr(scenario,
-                                     "{}_conf".format(daemon)))
+                conf_dir = getattr(scenario, "{}_conf".format(daemon))
+                start_daemon(node, daemon, conf_dir)
 
         if node.name.startswith('R'):
             # Enable IP forwarding
