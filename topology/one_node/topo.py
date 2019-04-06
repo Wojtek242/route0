@@ -7,8 +7,6 @@ class NetTopo(Topo):
     """The network topology.
     """
 
-    topo_dir = os.path.dirname(os.path.realpath(__file__))
-
     def __init__(self):
         # Add default members to class.
         super(NetTopo, self).__init__()

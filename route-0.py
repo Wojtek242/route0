@@ -7,9 +7,7 @@ from mininet.net import Mininet
 from mininet.cli import CLI
 
 from router import Router
-from topology.one_node.topo import NetTopo as OneNode
-from topology.two_nodes.topo import NetTopo as TwoNodes
-from scenario import Basic, Plain, Isis
+from scenario import Scenario
 
 
 def start_daemon(node, daemon, conf_dir):
@@ -25,7 +23,7 @@ def start_daemon(node, daemon, conf_dir):
     node.waitOutput()
 
 
-def run(topo, scenario):
+def run(scenario):
     """Start a network scenario.
     """
 
@@ -40,15 +38,14 @@ def run(topo, scenario):
     os.system("mn -c >/dev/null 2>&1")
     os.system("killall -9 {} > /dev/null 2>&1".format(' '.join(daemons)))
 
-    net = Mininet(topo=topo, switch=Router)
+    net = Mininet(topo=scenario.topo(), switch=Router)
     net.start()
-    scenario.setup(net, topo.topo_dir)
 
     # WARNING: FRR can get confused unless all daemons on each node are started
     #          together.
     for node in net.switches:
         for daemon in daemons:
-            if node in getattr(scenario, daemon):
+            if node.name in getattr(scenario, daemon, set()):
                 conf_dir = getattr(scenario, "{}_conf".format(daemon))
                 start_daemon(node, daemon, conf_dir)
 
@@ -67,35 +64,14 @@ def run(topo, scenario):
 
 
 if __name__ == "__main__":
-    topology = {
-        "one_node": OneNode,
-        "two_nodes": TwoNodes,
-    }
-
-    scenario = {
-        "plain": Plain,
-        "basic": Basic,
-        "isis": Isis,
-    }
-
-    supported = {
-        "one_node": set(["plain", "basic"]),
-        "two_nodes": set(["plain", "basic", "isis"]),
-    }
-
     parser = argparse.ArgumentParser(
         description='Launch a network scenario Mininet.')
-    parser.add_argument('--topology', type=str, required=True,
-                        choices=topology.keys(),
+    parser.add_argument('--topology', '-t', type=str, required=True,
                         help='the topology of the network')
-    parser.add_argument('--scenario', type=str, required=True,
-                        choices=scenario.keys(),
+    parser.add_argument('--scenario', '-s', type=str, required=True,
                         help='the scenario to set up in the network')
     ARGS = parser.parse_args()
 
-    if ARGS.scenario not in supported[ARGS.topology]:
-        raise ValueError("Scenario \"{}\" is not supported for topology \"{}\""
-                         .format(ARGS.scenario, ARGS.topology))
+    scenario = Scenario(ARGS.topology, ARGS.scenario)
 
-    run(topology[ARGS.topology](),
-        scenario[ARGS.scenario]())
+    run(scenario)
