@@ -1,11 +1,15 @@
 #!/usr/bin/env python
 
+import os
+
 from mininet.topo import Topo
 
 
 class NetTopo(Topo):
     """The network topology.
     """
+
+    topo_dir = os.path.dirname(os.path.realpath(__file__))
 
     def __init__(self):
         # Add default members to class.

@@ -1,26 +1,16 @@
 #!/usr/bin/env python
 
 import os
-import sys
 
 from mininet.net import Mininet
 from mininet.cli import CLI
 
-topo_dir = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)),
-    '../..')
-sys.path.append(topo_dir)
-from topo import NetTopo
-
-root_dir = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)),
-    '../../../..')
-sys.path.append(root_dir)
 from router import Router
+from topology.two_nodes.topo import NetTopo as TwoNodes
 
 
-def scenario():
-    """Start the network scenario.
+def run(topo):
+    """Start a network scenario.
     """
 
     os.system("rm -f /tmp/R*.log /tmp/R*.pid /tmp/R*.out")
@@ -28,27 +18,27 @@ def scenario():
     os.system("mn -c >/dev/null 2>&1")
     os.system("killall -9 zebra staticd > /dev/null 2>&1")
 
-    net = Mininet(topo=NetTopo(), switch=Router)
+    net = Mininet(topo=topo(), switch=Router)
     net.start()
 
     for node in net.switches:
         # Start Zebra (routing table daemon)
         node.cmd("/usr/lib/frr/zebra"
-                 " -f two-nodes/zebra/%s.conf"
+                 " -f %s/zebra/%s.conf"
                  " -d"
                  " -i /tmp/%s-zebra.pid"
                  " > /tmp/%s-zebra.out 2>&1"
-                 % (node.name, node.name, node.name))
+                 % (topo.topo_dir, node.name, node.name, node.name))
         node.waitOutput()
 
         if node.name.startswith('h'):
             # Start static route daemon
             node.cmd("/usr/lib/frr/staticd"
-                     " -f two-nodes/staticd/%s.conf"
+                     " -f %s/staticd/%s.conf"
                      " -d"
                      " -i /tmp/%s-staticd.pid"
                      " > /tmp/%s-staticd.out 2>&1"
-                     % (node.name, node.name, node.name))
+                     % (topo.topo_dir, node.name, node.name, node.name))
             node.waitOutput()
 
         if node.name.startswith('R'):
@@ -66,4 +56,4 @@ def scenario():
 
 
 if __name__ == "__main__":
-    scenario()
+    run(TwoNodes)
