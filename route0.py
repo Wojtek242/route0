@@ -69,10 +69,6 @@ def run(experiment):
             node.cmd("sysctl -w net.ipv4.ip_forward=1")
             node.waitOutput()
 
-            # Delete spare loopback address for convenience
-            node.cmd("ip addr del 127.0.0.1/8 dev lo")
-            node.waitOutput()
-
     CLI(net)
     net.stop()
     os.system("killall -9 {}".format(' '.join(experiment.daemons)))
