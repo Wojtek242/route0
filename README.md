@@ -40,10 +40,20 @@ provisioned, and brought up on a single computer.
 For the best experience it is recommended to run Route 0 experiments using the
 Virtual Machine (VM) image developed specifically for this project.
 
-TODO: INSTRUCTIONS FOR VM IMAGE
+1. [Download the ova file](https://drive.google.com/open?id=1mlovQSG-xYbBFboqUwKugpQrQNCEoWzd).
+2. In VirtualBox select `File->Import Appliance`, select the downloaded ova
+   file and then confirm all the settings.  You may adjust the settings, but
+   the defaults will work just fine.
+3. Start the Virtual Machine.
+4. (Optional) For a better experience install the VirtualBox Guest Additions.
+   Instructions on how to do that can be found
+   [here](PLATFORM.md#virtualbox-guest-additions).
+
+The account user name is `route0` and the password (needed for sudo commands)
+is also `route0`.
 
 If you would prefer to set up your own environment, you can follow these
-[instructions](platform.md).  They describe the steps needed to produce the
+[instructions](PLATFORM.md).  They describe the steps needed to produce the
 exact same VM image available above.
 
 Note that the VM does not come with the `route0` repository.  This is because
@@ -78,7 +88,7 @@ sudo python route0.py --topology <topology_name> --scenario <scenario_name>
 To connect to an FRR daamon, you can either run the following command inside
 the Mininet CLI
 ```
-<node_name> telnet localhost <daemon_name>
+noecho <node_name> telnet localhost <daemon_name>
 ```
 
 You can also connect to an FRR daemon from a different terminal than the one in

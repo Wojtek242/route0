@@ -8,9 +8,9 @@ up to date kernel, Mininet, and FRR installation, but this has not been tested.
 
 ## Setting up a Virtual Machine
 
-The following instructions setup exactly the same VM that is available from
-this image (TODO: link).  The instructions are provided below if for some
-reason you would prefer not to or are not able touse the pre-distributed image.
+The following instructions setup exactly the same VM that is suggested in the
+ `README` file.  The instructions are provided below if for some reason you
+ would prefer not to or are not able to use the pre-distributed image.
 
 ### Base Operating System
 
@@ -44,9 +44,38 @@ the terminal and run the following command
 sudo apt purge unattended-upgrades
 ```
 
-If you are using VirtualBox, you may find it useful to install the Guest
-Additions.  To install these Guest Additions follow [these
-instructions](https://askubuntu.com/questions/22743/how-do-i-install-guest-additions-in-a-virtualbox-vm).
+### VirtualBox Guest Additions
+
+If you are using VirtualBox, you may find it useful to install the VirtualBox
+Guest Additions.  Note that these are not actually included in the provided VM
+image as the installation depends on VirtualBox version.
+
+The best way to install the guest additions is to install them from the ISO
+image provided by VirtualBox.  Before doing that though, you need to first
+install `dkms` and `build-essential`.  In the terminal run
+```
+sudo apt install dkms build-essential
+```
+
+Now you need to obtain the CD.  Open your VM and from the menu bar select
+`Devices->Insert Guest Additions CD image`.  This will download the image.
+
+In case the download fails, you can download the image directly from the
+[VirtualBox website](http://download.virtualbox.org/virtualbox/).  Make sure
+you choose the right version for your VirtualBox installation (you can find it
+from the menu bar `Help->About VirtualBox`) and download the
+`VBoxGuestAdditions_<version>.iso`.  Once the download completes make sure to
+mount it in the settings window of your virtual machine.
+
+Open the file explorer and navigate to the inserted CD.  From here right click
+and select `Open Terminal Here`.  The last step is now to run
+```
+sudo ./VBoxLinuxAdditions.run
+```
+
+Once the installation completes, reboot the VM.  Amongst other things you can
+now enable the shared clipboard from the menu bar with `Devices->Shared
+Clipboard`.
 
 ### Installing Mininet
 
@@ -69,4 +98,8 @@ mininet/util/install.sh -fw
 
 Installing FRR is also easy on Ubuntu as the developers maintain a Debian
 repository which can be used for Ubuntu as well.  To install FRR from this
-repository follow [these instructions]((https://deb.frrouting.org/)).
+repository, install curl
+```
+sudo apt install curl
+```
+and follow [these instructions]((https://deb.frrouting.org/)).
