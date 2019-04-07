@@ -42,6 +42,10 @@ Virtual Machine (VM) image developed specifically for this project.
 
 TODO: INSTRUCTIONS FOR VM IMAGE
 
+If you would prefer to set up your own environment, you can follow these
+[instructions](platform.md).  They describe the steps needed to produce the
+exact same VM image available above.
+
 Note that the VM does not come with the `route0` repository.  This is because
 the repository will be updated much more frequently than the VM image.  You
 will still need to clone `route0` into an appropriate directory on the VM.  To
@@ -49,10 +53,6 @@ do so run
 ```
 git clone https://github.com/Wojtek242/route0.git
 ```
-
-If you would prefer to set up your own environment, you can follow these
-[instructions](platform.md).  They describe the steps needed to produce the
-exact same VM image available above.
 
 Note that both Mininet and FRR are developed primarily for Linux so if you have
 a different operating system you will have to use some form of virtualisation.

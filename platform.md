@@ -1,0 +1,72 @@
+# Platform
+
+Route 0 is developed and supported only on Ubuntu 18.04 using the distribution
+provided `mininet` package (version 2.2.2) and FRR Stable installed from the
+FRR [debian repositories](https://deb.frrouting.org/).  It is almost certain
+that everything will work on any other Linux distribution with a sufficiently
+up to date kernel, Mininet, and FRR installation, but this has not been tested.
+
+## Setting up a Virtual Machine
+
+The following instructions setup exactly the same VM that is available from
+this image (TODO: link).  The instructions are provided below if for some
+reason you would prefer not to or are not able touse the pre-distributed image.
+
+### Base Operating System
+
+For the base OS, the VM uses Xubuntu 18.04.  Version 18.04, because it's the
+most recent LTS version and more importantly it comes with kernel version 4.18
+which is new enough for all the FRR features.  The XFCE spin was chosen as a
+GUI is helpful for wireshark as well as people unfamiliar with Linux.  XFCE is
+a lightweight yet fully featured desktop environment.
+
+You can download a Xubuntu 18.04 ISO image from the [official
+website](https://xubuntu.org/download).
+
+Install the OS in the virtualisation system of your choice.  If you're not
+familiar with virtualisation systems, the easiest one to use and that is
+supported on all major operating systems is
+[VirtualBox](https://www.virtualbox.org/).
+
+After the installation completes, install all updates.  Xubuntu should prompt
+you to do so within a few minutes after the first boot, but you can also do it
+manually from a terminal with the following command lines:
+```
+sudo apt update
+sudo apt -y upgrade
+```
+
+Once the system finishes updating, I strongly recommend uninstalling
+`unattended-upgrades` as they have been known to cause problems inside virtual
+machines, especially with VirtualBox Guest Additions installed.  To do so, open
+the terminal and run the following command
+```
+sudo apt purge unattended-upgrades
+```
+
+If you are using VirtualBox, you may find it useful to install the Guest
+Additions.  To install these Guest Additions follow [these
+instructions](https://askubuntu.com/questions/22743/how-do-i-install-guest-additions-in-a-virtualbox-vm).
+
+### Installing Mininet
+
+Mininet is available from the Ubuntu repositories.  Simply run
+```
+sudo apt install mininet
+```
+
+It is also useful to some other components for use with Mininet such as
+wireshark.  You can do that manually or use the Mininet script provided for
+this purpose.  You will need `git` installed for this.  If you already have
+`git` installed you can skip the first line
+```
+sudo apt -y install git
+git clone git://github.com/mininet/mininet
+mininet/util/install.sh -fw
+```
+
+### Installing FRR
+
+Installing FRR is also easy on Ubuntu as the developers maintain a Debian
+repository which can be used for Ubuntu as well.  To install FRR from this
+repository follow [these instructions]((https://deb.frrouting.org/)).
