@@ -1,4 +1,4 @@
-# One node topology
+# One router topology
 
 ```
          ------ 
