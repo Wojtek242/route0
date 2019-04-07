@@ -24,27 +24,27 @@ Start by having a look around using the commands you learned in the previous
 lesson, `ip address` and `ip route`, and notice how none of the addresses or
 routes are present on any of the nodes.  Furthermore, if you try running the
 pings between any of the nodes, you will find they do not work and fail with a
-`Network is unreachable error`.  In this lesson we will manually reconstruct
+`Network is unreachable` error.  In this lesson we will manually reconstruct
 the `basic` network to illustrate all the different concepts involved.
 
 ### Assigning IP addresses
 
 A good place to start would be to simply assign all the IP addresses as per the
-`one_rtr` topology [README](../topology/one_rtr/README.md).  The command to
-assign an IP address to an interface in Linux has the form
+[`one_rtr` topology](../topology/one_rtr).  The command to assign an IP address
+to an interface in Linux has the form
 ```
-ip address add [ip]/[mask-digits] dev [if-name]
+ip address add <ip>/<mask-digits> dev <if-name>
 ```
 
-This command assigns the address `ip` associated with the subnet defined by the
-`mask-digits` to the interface `if-name`.  This should be pretty
+This command assigns the address `<ip>` associated with the subnet defined by
+the `<mask-digits>` to the interface `<if-name>`.  This should be pretty
 self-explanatory except for the subnet which may be a new concept for some of
 you.
 
-An IPv4 address is basically a 32-bit number.  The common representation
-`x.x.x.x` simply splits this number into four 8-bit numbers making it more
-readable for a human.  This is why none of the four numbers ever exceed 255 as
-that is the largest number you can represent with 8 bits.
+An IPv4 address is a 32-bit number.  The common representation `x.x.x.x` simply
+splits this number into four 8-bit numbers making it more readable for a human.
+This is why none of the four numbers ever exceed 255 as that is the largest
+number you can represent with 8 bits.
 
 A subnet is a subdivision of an IP network and determines all the possible IP
 addresses that can be connected directly to each other over a local network.
@@ -54,8 +54,8 @@ subnet means that we can communicate with all the other addresses in that
 subnet by using this interface.
 
 The subnet of an IP address is determined by its prefix.  The length in bits of
-the prefix is determine by the `mask-digits.`.  Thus, the IP address
-`10.11.12.13/24` belongs to a subnet defined by its first 24 bits, that is
+the prefix is determine by the `mask-digits`.  Thus, the IP address
+`10.11.12.13/24` belongs to a subnet defined by its first 24 bits,
 `10.11.12.0/24`.  The router will now forward all traffic to any IP address on
 this subnet, such as `10.11.12.1` or `10.11.12.165`, over this interface.
 
@@ -89,7 +89,7 @@ example we only have `10.1.0.1` and `10.1.0.254` on the network on the subnet
 `10.1.0.0/24` which is effectively a local network of one point-to-point link.
 
 Try pinging `10.100.0.5` and `10.1.0.5` from `h1_1`.  Notice how both fail, but
-only the first one returns the `Network is unreachable error`.  Why does the
+only the first one returns the `Network is unreachable` error.  Why does the
 second one appear to be stuck?  Since `10.1.0.5` belongs to the same subnet as
 `h1_1-eth1` the host tries to send the ping over this interface, but as the
 other end does not exist, the response never arrives.
@@ -102,21 +102,22 @@ sudo python attach.py --node h1_1 --cmd wireshark
 ```
 and start a packet capture on the `h1_1-eth1` interface.
 
-The first thing you will notice is how `h1_1` keeps send ARP protocol messages.
-ARP stands for the Address Resolution Protocol and is the mechanism by which a
-node finds the MAC address of the interface associated with the particular IP
-address.  In order to send a packet over a link it must be addressed to the
-right MAC address as otherwise no interface on the local network will pick the
-packet up.  In this case we see packets constantly asking "Who has 10.1.0.5?
-Tell 10.1.0.1", but nobody owns that IP address so nobody responds.
+The first thing you will notice is how `h1_1` keeps sending ARP protocol
+messages.  ARP stands for the Address Resolution Protocol and is the mechanism
+by which a node finds the MAC address of the interface associated with the
+particular IP address.  In order to send a packet over a link it must be
+addressed to the right MAC address as otherwise no interface on the local
+network will pick up the packet.  In this case we see packets constantly asking
+"Who has 10.1.0.5?  Tell 10.1.0.1", but nobody owns that IP address so nobody
+responds.
 
 Let's now look at what happens when the IP address exists on the network.  Set
 `h1_1` to ping the other end of its link `10.1.0.254` (you don't have to close
-wireshark).  Most of the packets sent and received will be the already known
+Wireshark).  Most of the packets sent and received will be the already known
 ping packets, but every now and then an ARP request is sent.  However, this
 time `h1_1` receives a response telling it the MAC address of the interface.
 If you inspect the ping packets that originate at `h1_1` you will notice that
-they do use that MAC address in the Ethernet header.
+they do use that MAC address as the destination in the Ethernet header.
 
 You may wonder why do the nodes need to do this?  After all the IP address
 already uniquely identifies the interface.  This is because the IP protocol
@@ -134,8 +135,8 @@ ping `10.2.0.1` from `h1_1` you will be told that the network is unreachable.
 If you look at the output of `ip route` on the host this error makes sense.
 The routing table doesn't know how to reach any subnet other than
 `10.1.0.0/24`.  We could just add a route for the `10.2.0.0/24` subnet to go
-via `R1` to `h1_1` which would work for `h1_2`, but would fail as soon as any
-new host is added to `R1`.
+via `R1` which would work for `h1_2`, but would fail as soon as any new host is
+added to `R1`.
 
 Instead we will add a default route to our host.  A default route is the route
 used for IP addresses that do not match any other more specific route.  To add
@@ -153,26 +154,29 @@ the local network, but in principle we could have more.  In that case,
 specifying an interface would not uniquely identify the next hop.
 
 Try pinging `10.2.0.1` from `h1_1` now.  You will notice that it no longer
-fails with a "Network unreachable error", but it still doesn't work.  Let's
+fails with a `Network is unreachable` error, but it still doesn't work.  Let's
 investigate using Wireshark.  If you inspect the traffic at `h1_1` you will
 notice that the requests are being sent, but no responses are received.  Let's
 check if `R1` is forwarding the packets.  If you launch Wireshark on `R1` you
 will notice that the packets are received on one interface and are forwarded to
-the other.  If you also inspect `h1_2` you will find that the request packets
-actually manage to make their way to the destination, but no response is sent.
+the other so that's not it.  If you also inspect `h1_2` you will find that the
+request packets do manage to make their way to the destination, but still no
+response is sent.
 
 Can you figure out what's going on?  What happens if you try pinging `h1_1`'s
 interface from `h1_2`?
 
 The problem is that `h1_2` doesn't have a default route itself.  It receives
-the ping packets and it tries to send a response back to source IP address, but
-then it finds out it doesn't know how which way to send a packet to that IP
-address.  The solution is to install a default route just like we did for
-`h1_1`.  Once installed you will notice that pings from `h1_1` now succeed.
+the ping packets and it tries to send a response back to the source IP address,
+but then it finds out it doesn't know what to do with a packet addressed to
+that IP address.  The solution is to install a default route just like we did
+for `h1_1`.  Once installed you will notice that pings from `h1_1` now succeed.
 
 ## Conclusion
 
-In this lesson you learned how to assign IP addresses to interfaces, what
-subnet is and how it is used in routing, and you also learned how to install
-default routs on hosts.  With these foundations we can move on to more complex
-routing where not all hosts are directly connected to the same router.
+At this point you should have the same network as was for the `basic` scenario.
+By building this network manually you learned how to assign IP addresses to
+interfaces, what a subnet is and how it is used in routing, and you also
+learned how to install default routes on hosts.  With these foundations we can
+move on to more complex routing where not all hosts are directly connected to
+the same router.
