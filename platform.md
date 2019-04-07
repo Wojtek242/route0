@@ -33,7 +33,7 @@ you to do so within a few minutes after the first boot, but you can also do it
 manually from a terminal with the following command lines:
 ```
 sudo apt update
-sudo apt -y upgrade
+sudo apt upgrade
 ```
 
 Once the system finishes updating, I strongly recommend uninstalling
@@ -60,7 +60,7 @@ wireshark.  You can do that manually or use the Mininet script provided for
 this purpose.  You will need `git` installed for this.  If you already have
 `git` installed you can skip the first line
 ```
-sudo apt -y install git
+sudo apt install git
 git clone git://github.com/mininet/mininet
 mininet/util/install.sh -fw
 ```
