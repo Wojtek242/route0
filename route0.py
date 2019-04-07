@@ -51,6 +51,11 @@ def run(experiment):
     net = Mininet(topo=experiment.topo(), switch=Router)
     net.start()
 
+    # WARNING: zebra must always be started first.  It is expected that
+    #          Experiment provides the order for the daemons so we only assert.
+    if "zebra" in experiment.daemons:
+        assert experiment.daemons[0] == "zebra"
+
     # WARNING: FRR can get confused unless all daemons on each node are started
     #          together.
     for node in net.switches:
