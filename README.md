@@ -42,12 +42,12 @@ Virtual Machine (VM) image developed specifically for this project.
 
 TODO: INSTRUCTIONS FOR VM IMAGE
 
-Note that the VM does not come with the `route-0` repository.  This is because
+Note that the VM does not come with the `route0` repository.  This is because
 the repository will be updated much more frequently than the VM image.  You
-will still need to clone `route-0` into an appropriate directory on the VM.  To
+will still need to clone `route0` into an appropriate directory on the VM.  To
 do so run
 ```
-git clone https://github.com/Wojtek242/route-0.git
+git clone https://github.com/Wojtek242/route0.git
 ```
 
 If you would prefer to set up your own environment, you can follow these
@@ -70,7 +70,7 @@ this `README` in the section on scenarios.
 Once you have chosen `<topology_name>` and `<scenario_name>` you can run an
 experiment with the following command.
 ```
-sudo python route-0.py --topology <topology_name> --scenario <scenario_name>
+sudo python route0.py --topology <topology_name> --scenario <scenario_name>
 ```
 
 ### Connecting to an FRR daemon

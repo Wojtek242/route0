@@ -20,7 +20,7 @@ Adding a new topology is straightforward.
 
 The easiest way to start would be to copy some other topology and customise it
 as appropriate.  Once ready, the topology should be automatically detected by
-`route-0.py` when you pass your topology's name as the `--topology` argument.
+`route0.py` when you pass your topology's name as the `--topology` argument.
 
 ## Adding a new scenario
 
