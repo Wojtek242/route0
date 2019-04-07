@@ -27,6 +27,9 @@ class Experiment(object):
                       .import_module('topology.{}.topo'.format(topology))
                       .NetTopo)
 
+        # Initialise list of daemons.
+        self.daemons = []
+
         # Return now if the scenario is "plain".
         if scenario == "plain":
             return
@@ -56,6 +59,11 @@ class Experiment(object):
         # Each daemon entry should be a directory.
         daemon_dir = os.path.join(parent_dir, daemon)
         if os.path.exists(daemon_dir) and os.path.isdir(daemon_dir):
+            # Make sure zebra is always first on the list of daemons.
+            if daemon == "zebra":
+                self.daemons.insert(0, daemon)
+            else:
+                self.daemons.append(daemon)
             setattr(self, daemon, set())
             setattr(self, "{}_conf".format(daemon), daemon_dir)
 
