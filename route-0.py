@@ -80,9 +80,9 @@ def main():
 
     parser = argparse.ArgumentParser(
         description='Launch an FRR network experiment in Mininet.')
-    parser.add_argument('--topology', '-t', type=str, required=True,
+    parser.add_argument('-t', '--topology', required=True,
                         help='the topology of the network')
-    parser.add_argument('--scenario', '-s', type=str, required=True,
+    parser.add_argument('-s', '--scenario', required=True,
                         help='the scenario to set up in the network')
     args = parser.parse_args()
 

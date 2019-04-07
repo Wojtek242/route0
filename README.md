@@ -73,6 +73,22 @@ experiment with the following command.
 sudo python route-0.py --topology <topology_name> --scenario <scenario_name>
 ```
 
+### Connecting to an FRR daemon
+
+To connect to an FRR daamon, you can either run the following command inside
+the Mininet CLI
+```
+<node_name> telnet localhost <daemon_name>
+```
+
+You can also connect to an FRR daemon from a different terminal than the one in
+which the Mininet CLI is running.  To do this run
+```
+sudo python attach.py --node <node_name> --daemon <daemon_name>
+```
+
+The password for all daemons is `route0`.
+
 ### Lessons
 
 TODO: WRITE UP LESSONS
@@ -106,6 +122,18 @@ in Mininet the destination can also be specified using its name.  It is
 possible to do so in Route 0, but this is often ambiguous as routers will have
 multiple IP addresses associated with their interfaces.
 
+It is also possible to launch a shell or run a command in a Mininet node from a
+different terminal than the one in which the Mininet CLI is being run.  A
+convenience script has been provided for this purpose, `attach.py`.  To launch
+a shell in a particular node run
+```
+sudo python attach.py --node <node_name>
+```
+You can also directly specify the daemon to connect to with `--daemon` or a
+shell command to run with `--cmd`.
+
+The password for all daemons is `route0`.
+
 ## FRR Concepts
 
 This section will introduce some basic FRR concepts that are in particular
@@ -121,10 +149,8 @@ routes as appropriate.
 FRR routing protocols are configured using configuration files.  The details of
 how to write these configurations are on the [FRR documentation
 website](http://docs.frrouting.org/en/latest/).  It is also possible to connect
-to running instances of the protocols.  However, this is not currently
-supported in Route 0.
-
-TODO: ADD SUPPORT TO CONNECT TO ROUTING PROTOCOL SHELL
+to running instances of the protocols.  See the Mininet and Getting Started
+sections on how this can be done.
 
 ## Structure
 
