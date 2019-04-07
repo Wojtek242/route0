@@ -19,6 +19,12 @@ makes them difficult to learn from and experiment with.  As somebody looking
 for resources to learn about configuring networks to play with on my own
 computer that seemed like a big gap.
 
+Furthermore, there are lots of resources online for learning the theory of how
+networks are connected to each other and how routing works on the Internet, but
+very few of them come with any practical examples.  It is one thing to learn
+the concepts and a completely different thing to apply them in a practical real
+world scenario.  Route 0 was made to address this issue as well.
+
 ### Purpose
 
 The primary purpose of Route 0 is to provide a framework for learning how
@@ -101,7 +107,18 @@ The password for all daemons is `route0`.
 
 ### Lessons
 
-TODO: WRITE UP LESSONS
+The lessons in this repository are aimed to take somebody who knows nothing
+about IP routing all the way to setting up networks with multiple autonomous
+systems and VPN tunnels.  The lessons are structured in such a way that the
+reader must first manually setup and configure the network before moving on to
+the next step.  Each stage starts at a point which can be automatically
+provisioned by Route 0 and the purpose of each lesson is to explain how this
+automation is achieved through network configuration.  This particular
+structure also means that it is possible to dive in at any point making it
+suitable for people with more experience as well.
+
+The table of contents with links to all the lessons can be found in the
+[lessons directory](lessons).
 
 ## Mininet Concepts
 

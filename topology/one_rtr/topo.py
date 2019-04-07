@@ -16,8 +16,8 @@ class NetTopo(Topo):
 
         # Add hosts
         h_1_1 = self.addSwitch('h1_1')
-        h_2_1 = self.addSwitch('h2_1')
+        h_1_2 = self.addSwitch('h1_2')
 
         # Setup links as shown in README.md
         self.addLink(r_1, h_1_1)
-        self.addLink(r_1, h_2_1)
+        self.addLink(r_1, h_1_2)

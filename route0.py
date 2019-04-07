@@ -71,7 +71,8 @@ def run(experiment):
 
     CLI(net)
     net.stop()
-    os.system("killall -9 {}".format(' '.join(experiment.daemons)))
+    if experiment.daemons:
+        os.system("killall -9 {}".format(' '.join(experiment.daemons)))
 
 
 def main():
