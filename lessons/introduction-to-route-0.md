@@ -16,6 +16,7 @@ communication.  The convention in Route 0 is to name routers with a name that
 starts with the letter `R` and hosts with a name starting with `h`.
 
 You can launch the network by running
+
 ```
 sudo python route0.py --topology one_rtr --scenario basic
 ```
@@ -27,33 +28,36 @@ addresses and default routes.
 
 Once the CLI prompt appears let us inspect Mininet's representation of the
 network by running
+
 ```
 net
 ```
+
 in the command prompt.  The output tells us about all the nodes in the network
 and the connections between them.  We can see that `R1`'s `R1-eth1` interface
 is connected to `h1_1`'s `h1_1-eth1` interface and `R1-eth2` is connected to
 `h1_2`'s `h1_2-eth1` interface.  You can visualise the network by copy-pasting
 the output into this [web
-tool](https://achille.github.io/mininet-dump-visualizer/) though its usefulness
-is limited for small networks such as this.
+tool](https://achille.github.io/mininet-dump-visualizer/) though this is of
+limited usefulness for small networks such as this.
 
 ## Basic IP commands
 
 Let us now inspect the network using some basic Linux commands.  The three main
-commands we will use to investigate the state on the nodes are `ip
-address`, `ip route`, and `ping`.  To run any of these commands on a particular node,
-you need to prefix it with the node's name in the Mininet CLI.  For example, to
-see all the interfaces and their addresses on `R1` you would run
+commands we will use to investigate the state on the nodes are `ip addr`, `ip
+route`, and `ping`.  To run any of these commands on a particular node, you
+need to prefix it with the node's name in the Mininet CLI.  For example, to see
+all the interfaces and their addresses on `R1` you would run
+
 ```
-R1 ip address
+R1 ip addr
 ```
 
 There is also an older obsolete command `ifconfig` which is still commonly
 used.  However, all information available through `ifconfig` is available
 through the `ip` commands.
 
-### ip address
+### ip addr
 
 This command lists all addresses assigned to the interfaces on the given
 device.  This includes the Ethernet address as well as all IPv4 and IPv6
@@ -61,7 +65,7 @@ addresses.  For the purposes of these lessons we are only interested in the
 IPv4 addresses which are displayed as either `x.x.x.x` or `x.x.x.x/y`.
 
 The first thing to notice when running this command (especially on `R1`) is
-that there are multiple IP addresses assigned to a single device.  This is
+that there may be multiple IP addresses assigned to a single device.  This is
 because IP addresses are bound to network interfaces not devices.  Furthermore,
 it is also possible to assign multiple IP addresses to a single interface.  You
 will notice that the `lo` interface on `R1` actually has two IP addresses.
@@ -69,32 +73,36 @@ will notice that the `lo` interface on `R1` actually has two IP addresses.
 ### ip route
 
 The `ip route` command is used to list all the routes installed on a particular
-node.  The basic format of a route is `x.x.x.x/y via z.z.z.z` which says that
-to reach the IP network `x.x.x.x/y` you must go via the address `z.z.z.z` which
-should belong to an interface on a directly connected neighbour.  Note that you
-won't see such routes in this network setup, because the network is too simple.
+node.  The basic format of a route you will see at the moment is of the form
+`x.x.x.x/y dev if-name` which means that in order to reach `x.x.x.x/y` you must
+go via the network connected to the interface `if-name`.
 
 The host nodes have a default route installed which looks like `default via
 z.z.z.z` which means that the node should route all traffic it doesn't have a
-more specific route for via `z.z.z.z`.
+more specific route for via `z.z.z.z`.  The IP address `z.z.z.z` should then
+resolve to an interface via a routing entry like the one in the previous
+paragraph.  If it doesn't, the packet will fail to be forwarded.
 
-In the network we have running you will also see routes of the form `x.x.x.x/y
-dev if-name` which means that in order to reach `x.x.x.x/y` you must go via the
-network connected to the interface `if-name`.
+Another basic format of a route is `x.x.x.x/y via z.z.z.z` which says that to
+reach the IP network `x.x.x.x/y` you must go via the address `z.z.z.z`.  This
+works similarly to the default route, but is more specific.  Note that you
+won't see such routes in this network setup, because the network is too simple.
 
 ### ping
 
-The command `ping` sends a special IP packet to the specified destination to
+The `ping` command sends a special IP packet to the specified destination to
 verify connectivity with that end-host.  Connectivity is verified if a response
-is received.  Try sending a ping from `h1_1` to an IP address on `h1_2` by
-running
+to the ping request is received.  Try sending a ping from `h1_1` to an IP
+address on `h1_2` by running
+
 ```
 h1_1 ping 10.2.0.1
 ```
 
 The address `10.2.0.1` is the IPv4 address assigned to the interface
-`h1_2-eth1` on `h1_2`.  The command will keep pinging the specified destination
-every second.  To stop press `Ctrl+C`.  Now try pinging the other way.  The
+`h1_2-eth1` on `h1_2`.  You can check this using the `ip addr` command on
+`h1_2`.  The `ping` command will keep pinging the specified destination every
+second.  To stop press `Ctrl+C`.  Now try pinging the other way.  The
 intermediate node `R1` knows how to forward the traffic between the two hosts,
 because it is directly connected to both of them.
 
@@ -103,14 +111,15 @@ because it is directly connected to both of them.
 Before moving on to the next lesson it would be good to introduce a
 particularly useful tool in studying networks, Wireshark, by using it to look
 at pings from `h1_1` to `h1_2`.  Wireshark is a tool that lets you capture and
-inspect packets sent and received over all interfaces on a device.
-Furthermore, it is able to present them in a human readable form rather than
-simply dumping the binary representation directly from the wire.
+inspect packets sent and received over any interface on a device.  Furthermore,
+it is able to present them in a human readable form rather than simply dumping
+the binary representation directly from the wire.
 
 Start by running the command to trigger `h1_1` to send pings to `h1_2`.  Now
 open a new terminal window and navigate to the `route0` directory.  We will use
 the `attach.py` helper script to run Wireshark on `R1` and `h1_2`.  Let's start
 with `R1` by running
+
 ```
 sudo python attach.py --node R1 --cmd wireshark
 ```
