@@ -1,9 +1,10 @@
 # Contributing
 
 There are many ways to contribute to Route 0.  If you are an expert in
-networking, you can look for and correct errors, improve the existing lessons,
-add new lessons, or add IPv6 support.  Another way to contribute is to simply
-add new scenarios or topologies that you feel would be interesting for others.
+networking you can look for and correct errors, improve the existing lessons,
+add new lessons, or add IPv6 lessons/support.  Another way to contribute is to
+simply add new scenarios or topologies that you feel would be interesting for
+others and perhaps some accompanying lessons.
 
 ## Adding a new topology
 
