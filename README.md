@@ -240,6 +240,26 @@ An experiment is simply a particular topology and scenario combination.
 Technically this is redundant since scenarios are strictly associated with only
 one topology, but using different terminology avoids confusion.
 
+### A note on configuration files
+
+The official FRR documentation recommends using only a single configuration
+file `frr.conf` per router.  This makes sense if we are only running a single
+instance of each protocol on the device as then all the configuration is in one
+place.  Route 0 does not do that.  Using a single configuration file would mean
+that a lot of options would need to be repeated between different scenarios,
+especially for `zebra` and `staticd`.
+
+Furthermore, separating the config files makes it easier for the python scripts
+to know which daemons to start (though of course it could just start all of
+them every time or use some additional configuration file).
+
+Finally, one last advantage of the Route 0 configuration model for our use case
+is that the we group configurations per protocol, not per device.  This makes
+no sense if you're running only one instance of a protocol on a given device,
+but since we are running multiple instances on multiple virtual nodes on a
+single physical device, it makes it easier to inspect and compare the
+configurations on a protocol level.
+
 ## Contributing
 
 For information on how to contribute see [CONTRIBUTING](CONTRIBUTING.md).
