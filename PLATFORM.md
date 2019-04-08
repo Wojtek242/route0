@@ -1,16 +1,18 @@
 # Platform
 
-Route 0 is developed and supported only on Ubuntu 18.04 using the distribution
-provided `mininet` package (version 2.2.2) and FRR Stable installed from the
-FRR [debian repositories](https://deb.frrouting.org/).  It is almost certain
-that everything will work on any other Linux distribution with a sufficiently
-up to date kernel, Mininet, and FRR installation, but this has not been tested.
+Route 0 is developed and officially supported only on Ubuntu 18.04 using the
+distribution provided `mininet` package (version 2.2.2) and FRR Stable
+installed from the FRR [debian repositories](https://deb.frrouting.org/).  It
+is almost certain that everything will work on any other Linux distribution
+with a sufficiently up to date kernel, Mininet, and FRR installation, but this
+has not been tested.  For kernel compatibility please refer to the [FRR
+website](http://docs.frrouting.org/en/latest/overview.html#supported-protocols-vs-platform).
 
 ## Setting up a Virtual Machine
 
 The following instructions setup exactly the same VM that is suggested in the
- `README` file.  The instructions are provided below if for some reason you
- would prefer not to or are not able to use the pre-distributed image.
+ main `README` file.  The instructions are provided below if for some reason
+ you would prefer not to or are not able to use the pre-configured image.
 
 ### Base Operating System
 
@@ -29,8 +31,8 @@ supported on all major operating systems is
 [VirtualBox](https://www.virtualbox.org/).
 
 After the installation completes, install all updates.  Xubuntu should prompt
-you to do so within a few minutes after the first boot, but you can also do it
-manually from a terminal with the following command lines:
+you to do so shortly after the first boot, but you can also do it manually from
+a terminal with the following command lines:
 ```
 sudo apt update
 sudo apt upgrade
@@ -48,7 +50,7 @@ sudo apt purge unattended-upgrades
 
 If you are using VirtualBox, you may find it useful to install the VirtualBox
 Guest Additions.  Note that these are not actually included in the provided VM
-image as the installation depends on VirtualBox version.
+image as the installation depends on the VirtualBox version in use.
 
 The best way to install the guest additions is to install them from the ISO
 image provided by VirtualBox.  Before doing that though, you need to first
@@ -84,7 +86,7 @@ Mininet is available from the Ubuntu repositories.  Simply run
 sudo apt install mininet
 ```
 
-It is also useful to some other components for use with Mininet such as
+It is also useful to install some other components for use with Mininet such as
 wireshark.  You can do that manually or use the Mininet script provided for
 this purpose.  You will need `git` installed for this.  If you already have
 `git` installed you can skip the first line
@@ -98,7 +100,7 @@ mininet/util/install.sh -fw
 
 Installing FRR is also easy on Ubuntu as the developers maintain a Debian
 repository which can be used for Ubuntu as well.  To install FRR from this
-repository, install curl
+repository, install curl first
 ```
 sudo apt install curl
 ```
