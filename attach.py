@@ -43,7 +43,20 @@ def main():
     pid = get_pid(args.node)
     cmd = ' '.join(args.cmd)
     if args.daemon is not None:
-        cmd = "telnet localhost {}".format(args.daemon)
+        port_dict = {
+            "zebrasrv": 2600,
+            "zebra": 2601,
+            "ripd": 2602,
+            "ripngd": 2603,
+            "ospfd": 2604,
+            "bgpd": 2605,
+            "ospf6d": 2606,
+            "ospfapi": 2607,
+            "isisd": 2608,
+            "staticd": 2616,
+        }
+
+        cmd = "telnet localhost {}".format(port_dict[args.daemon])
 
     os.system("mnexec -a {} {}".format(pid, cmd))
 
