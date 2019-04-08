@@ -11,15 +11,20 @@ implementations running on top of a network setup locally using
 
 Mininet is a great tool for [teaching, learning, and
 experimenting](https://github.com/mininet/mininet/wiki/Teaching-and-Learning-with-Mininet)
-with networking.  However, there was no coherent framework or easy to examples
-to follow which would let one use Mininet to setup a network running a bunch of
-routing protocols.  The FRR project actually uses Mininet for running [topology
+with networking.  However, there was no coherent framework to use which would
+let one use Mininet to setup a network running an entire set of routing
+protocols.  A [small example that demonstrated BGP
+hijacking](https://github.com/mininet/mininet/wiki/BGP-Path-Hijacking-Attack-Demo)
+has existed for a while and showed that this is possible, but there isn't much
+more beyond that on case.
+
+The FRR project actually uses Mininet for running [topology
 tests](https://github.com/FRRouting/frr/tree/master/tests/topotests), but that
 makes them difficult to learn from and experiment with.  As somebody looking
 for resources to learn about configuring networks to play with on my own
 computer that seemed like a big gap.
 
-Furthermore, there are lots of resources online for learning the theory of how
+Finally, there are lots of resources online for learning the theory of how
 networks are connected to each other and how routing works on the Internet, but
 very few of them come with any practical examples.  It is one thing to learn
 the concepts and a completely different thing to apply them in a practical real
@@ -37,7 +42,7 @@ that you can start from any point you like.
 
 A secondary purpose is to provide an experimental testbed in which a network
 running a whole stack of routing protocols can be quickly designed,
-provisioned, and brought up on a single computer.
+provisioned, and brought up on a single computer (mostly thanks to Mininet).
 
 ## Getting Started
 
@@ -65,7 +70,7 @@ exact same VM image available above.
 Note that the VM does not come with the `route0` repository.  This is because
 the repository will be updated much more frequently than the VM image.  You
 will still need to clone `route0` into an appropriate directory on the VM.  To
-do so run
+do so run the following command in a terminal in the VM
 ```
 git clone https://github.com/Wojtek242/route0.git
 ```
@@ -79,12 +84,12 @@ other Unix-like systems, but that is undocumented.
 
 If you just want to get started, choose a topology from the `topology`
 directory, and a scenario from the `scenario` directory within.  Note that all
-topologies support `plain` and `basic` in addition the explicit defined
-scenarios.  The meaning of these special scenarios is explained later on in
-this `README` in the section on scenarios.
+topologies support `plain` and `basic` in addition to the explicitly defined
+scenarios.  The meaning of these special scenarios is explained in the section
+on scenarios.
 
 Once you have chosen `<topology_name>` and `<scenario_name>` you can run an
-experiment with the following command.
+experiment with the following command from the project directory
 ```
 sudo python route0.py --topology <topology_name> --scenario <scenario_name>
 ```
@@ -111,7 +116,7 @@ The lessons in this repository are aimed to take somebody who knows nothing
 about IP routing all the way to setting up networks with multiple autonomous
 systems and VPN tunnels.  The lessons are structured in such a way that the
 reader must first manually setup and configure the network before moving on to
-the next step.  Each stage starts at a point which can be automatically
+the next step.  Each stage starts at a point that can be automatically
 provisioned by Route 0 and the purpose of each lesson is to explain how this
 automation is achieved through network configuration.  This particular
 structure also means that it is possible to dive in at any point making it
@@ -128,9 +133,9 @@ documentation](https://github.com/mininet/mininet/wiki/Documentation).
 
 Mininet is a framework for creating virtual networks running real kernel,
 switch, and application code.  In Route 0 it is used to provide the
-virtualisation necessary to run multiple routing nodes on a single
-computer. Mininet handles the topology setup before dropping the user in its
-own special CLI.
+virtualisation necessary to run multiple routing nodes on a single computer.
+Mininet handles the topology setup before dropping the user in its own special
+CLI.
 
 The CLI is self-documented and help can be accessed by running `help`.  To
 investigate the current topology, you can run `net`.  To visualise the output
@@ -142,17 +147,17 @@ on any of the nodes in the network.  To do this, simply run
 ```
 <node_name> <shell_command>
 ```
-such as `R1 ifconfig`.  This is particularly useful in Route 0 for commands
-like `ifconfig` or `ip route`.  Additionally, it is possible to use this
-feature to send ping between nodes, for example, `R1 ping 10.0.0.1`.  Normally,
-in Mininet the destination can also be specified using its name.  It is
-possible to do so in Route 0, but this is often ambiguous as routers will have
-multiple IP addresses associated with their interfaces.
+such as `R1 ip address`.  This is particularly useful in Route 0 for commands
+like `ip address` or `ip route`.  Additionally, it is possible to use this
+feature to send pings between nodes, for example, `R1 ping 10.0.0.1`.
+Normally, in Mininet the destination can also be specified using its name.  It
+is possible to do so in Route 0, but this is often ambiguous as routers will
+have multiple IP addresses associated with their interfaces.
 
 It is also possible to launch a shell or run a command in a Mininet node from a
 different terminal than the one in which the Mininet CLI is being run.  A
 convenience script has been provided for this purpose, `attach.py`.  To launch
-a shell in a particular node run
+a shell on a particular node run
 ```
 sudo python attach.py --node <node_name>
 ```
@@ -176,8 +181,8 @@ routes as appropriate.
 FRR routing protocols are configured using configuration files.  The details of
 how to write these configurations are on the [FRR documentation
 website](http://docs.frrouting.org/en/latest/).  It is also possible to connect
-to running instances of the protocols.  See the Mininet and Getting Started
-sections on how this can be done.
+to a shell on running instances of the protocols and configure it from there.
+See the Mininet and Getting Started sections on how this can be done.
 
 ## Structure
 
@@ -202,9 +207,9 @@ and that routers do not have default routes.
 
 ### Scenario
 
-A scenario is a particular configuration of FRR daemons on the provided
+A scenario is a particular configuration of FRR protocols on the provided
 topology.  While the topology defines which nodes and links form the network,
-the scenario determines which daemons get started on which nodes and their
+the scenario determines which protocols get started on which nodes and their
 configuration.
 
 There are two special scenarios: `plain` and `basic`. The `plain` scenario
@@ -226,7 +231,8 @@ directly in the topology directory.  If a scenario has its own `zebra` and/or
 `staticd` directory, these will be used preferentially, but otherwise the
 topology's ones will be used.  Note that if no `zebra` and/or `staticd` daemon
 is to be run then the scenario must have empty `zebra` and/or `staticd`
-directories within its scenario directory.
+directories within its scenario directory.  Note all FRR protocols rely on
+`zebra` to function correctly.
 
 ### Experiment
 
@@ -242,8 +248,7 @@ For information on how to contribute see [CONTRIBUTING](CONTRIBUTING.md).
 
 I am terrible at coming up with names so I'll at least explain myself.  The
 word "Route" was chosen due to its dual meaning.  A route is naturally a
-central concept in networking, but it in every day English it simply means a
-path, a track, a road.  This repository is a tutorial, a road to learning about
-routing protocols, hence a "Route".  The number 0 is used to indicate that this
-is the first route one would take in their networking education.
-
+central concept in networking, but in every day English it simply means a path,
+a track, a road.  This repository is a tutorial, a road to learning about
+routing protocols, hence it is a "Route".  The number 0 is used to indicate
+that this is the first route one would take in their networking education.
