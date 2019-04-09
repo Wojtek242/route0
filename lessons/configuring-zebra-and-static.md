@@ -20,6 +20,16 @@ Before you continue with the lesson you may find it useful to read the brief
 section on [system architecture on the FRR
 website](http://docs.frrouting.org/en/latest/overview.html#system-architecture).
 
+## A note on running FRR daemons on hosts
+
+It is a bit unusual to run the FRR daemons on the end-hosts as they are not
+routers and do not need anything other than an IP address and a default route.
+This could be achieved in Mininet in different ways using Python.  However, by
+using the FRR daemons, the configuration can be done through configuration
+files read in at startup.  This makes it much easier to define and maintain
+topologies because as it keeps all IP address configuration for end-hosts in
+the same place as router configuration.
+
 ## Starting the daemons
 
 Before we start the network we need to actually create a basic configuration
@@ -206,7 +216,7 @@ the FRR daemons!
 The manual configuration process was rather tedious which is why configuration
 files exist.  When you start the network in the `basic` scenario using
 `route0.py` it simply reads in a bunch of configuration files.  The ones it
-reads on for `one_rtr` can be found in the
+reads in for `one_rtr` can be found in the
 [`staticd`](../topology/one_rtr/staticd) and
 [`zebra`](../topology/one_rtr/zebra) directories in its [topology
 directory](../topology/one_rtr).  Have a look at them and see how similar they
