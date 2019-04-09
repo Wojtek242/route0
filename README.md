@@ -240,7 +240,7 @@ An experiment is simply a particular topology and scenario combination.
 Technically this is redundant since scenarios are strictly associated with only
 one topology, but using different terminology avoids confusion.
 
-### A note on configuration files
+### Configuration files
 
 The official FRR documentation recommends using only a single configuration
 file `frr.conf` per router.  This makes sense if we are only running a single
@@ -259,6 +259,24 @@ no sense if you're running only one instance of a protocol on a given device,
 but since we are running multiple instances on multiple virtual nodes on a
 single physical device, it makes it easier to inspect and compare the
 configurations on a protocol level.
+
+### End-host configuration files
+
+It's not entirely normal to run FRR daemons on end-hosts.  However, they still
+need their IP address and default route configured and the options are to do it
+either from a Python script or use FRR daemons.  Using the FRR `zebra` and
+`staticd` daemons makes it easier to configure the end-hosts together with the
+actual routers.  However, they should not be running any daemon other than
+`zebra` and `staticd`.
+
+### A note on VTY shell
+
+The recommended way of connecting to daemons by FRR is to use the [VTY
+shell](http://docs.frrouting.org/en/latest/vtysh.html) which can connect to all
+the daemons simultaneously.  Unfortunately, in our configuration where multiple
+instances of the same daemon run on the same machine in Mininet, it gets
+confused and it doesn't connect as expected.  Therefore, you can't use the VTY
+shell with Route 0.
 
 ## Contributing
 
