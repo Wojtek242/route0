@@ -1,11 +1,16 @@
+"""The experiment module is responsible for collecting topology and scenario
+settings.
+
+"""
+
 import importlib
 import os
 import sys
 
 
-class Experiment(object):
-    """Class that describes a network experiment.  An experiment is a particular
-    combination of topology and scenario.
+class Experiment:
+    """Class that describes a network experiment.  An experiment is a
+    particular combination of topology and scenario.
 
     A topology determines the nodes and their links in the network.
 
@@ -37,6 +42,7 @@ class Experiment(object):
         # Check if the scenario directory exists.  If it does work out which
         # daemons are to be used and on which nodes.  If the scenario is
         # "basic" skip this step.
+        self._scenario_script = None
         if scenario != "basic":
             scenario_dir = os.path.join(topo_dir,
                                         "scenario/{}".format(scenario))
@@ -47,6 +53,16 @@ class Experiment(object):
             # Work out which daemons to start and their config directories.
             for daemon in os.listdir(scenario_dir):
                 self._get_daemon_nodes(scenario_dir, daemon)
+
+            # If there is a scenario.py in the directory import the script
+            # function from it.
+            if os.path.exists(os.path.join(scenario_dir, "scenario.py")):
+                self._scenario_script = (
+                    importlib
+                    .import_module("topology.{}.scenario.{}.scenario"
+                                   .format(topology, scenario))
+                    .script
+                )
 
         # Zebra and staticd daemons are special.  If they don't have an
         # override in the scenario directory, take the defaults from the
@@ -80,3 +96,10 @@ class Experiment(object):
 
         """
         return self._topo
+
+    @property
+    def script(self):
+        """The script to run after the daemons have been started.
+
+        """
+        return self._scenario_script

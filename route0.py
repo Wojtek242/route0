@@ -1,4 +1,9 @@
-#!/usr/bin/env python
+"""Route 0 is a suite for learning about and experimenting with routing
+protocols.  It uses the [Free Range Routing (FRR)](https://frrouting.org/)
+protocol implementations running on top of a network setup locally using
+[Mininet](http://mininet.org/).
+
+"""
 
 import argparse
 import os
@@ -68,6 +73,10 @@ def run(experiment):
             # Enable IP forwarding
             node.cmd("sysctl -w net.ipv4.ip_forward=1")
             node.waitOutput()
+
+    # Run scenario script if one has been provided.
+    if experiment.script is not None:
+        experiment.script(net)
 
     CLI(net)
     net.stop()
