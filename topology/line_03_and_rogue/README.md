@@ -19,6 +19,10 @@
 There are three hosts connected to each router, but are not displayed in this
 `README`.  For details see their `zebra` and `staticd` configuration files.
 
+The router `R4` is rogue and uses the same prefix as `R3`.  Therefore, its
+`zebra` daemon is not started automatically.  It must be started manually.  See
+the [BGP hijack demo](scenario/bgp_hijack) for an example.
+
 ## R1
 
 Interface | Name    | Address/Subnet
