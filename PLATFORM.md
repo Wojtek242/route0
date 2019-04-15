@@ -33,6 +33,7 @@ supported on all major operating systems is
 After the installation completes, install all updates.  Xubuntu should prompt
 you to do so shortly after the first boot, but you can also do it manually from
 a terminal with the following command lines:
+
 ```
 sudo apt update
 sudo apt upgrade
@@ -42,6 +43,7 @@ Once the system finishes updating, I strongly recommend uninstalling
 `unattended-upgrades` as they have been known to cause problems inside virtual
 machines, especially with VirtualBox Guest Additions installed.  To do so, open
 the terminal and run the following command
+
 ```
 sudo apt purge unattended-upgrades
 ```
@@ -54,7 +56,8 @@ image as the installation depends on the VirtualBox version in use.
 
 The best way to install the guest additions is to install them from the ISO
 image provided by VirtualBox.  Before doing that though, you need to first
-install `dkms` and `build-essential`.  In the terminal run
+install `dkms` and `build-essential`.  In the terminal inside the VM run
+
 ```
 sudo apt install dkms build-essential
 ```
@@ -69,8 +72,9 @@ from the menu bar `Help->About VirtualBox`) and download the
 `VBoxGuestAdditions_<version>.iso`.  Once the download completes make sure to
 mount it in the settings window of your virtual machine.
 
-Open the file explorer and navigate to the inserted CD.  From here right click
-and select `Open Terminal Here`.  The last step is now to run
+Open the file explorer in the VM and navigate to the inserted CD.  From here
+right click and select `Open Terminal Here`.  The last step is now to run
+
 ```
 sudo ./VBoxLinuxAdditions.run
 ```
@@ -82,6 +86,7 @@ Clipboard`.
 ### Installing Mininet
 
 Mininet is available from the Ubuntu repositories.  Simply run
+
 ```
 sudo apt install mininet
 ```
@@ -90,6 +95,7 @@ It is also useful to install some other components for use with Mininet such as
 wireshark.  You can do that manually or use the Mininet script provided for
 this purpose.  You will need `git` installed for this.  If you already have
 `git` installed you can skip the first line
+
 ```
 sudo apt install git
 git clone git://github.com/mininet/mininet
@@ -101,7 +107,9 @@ mininet/util/install.sh -fw
 Installing FRR is also easy on Ubuntu as the developers maintain a Debian
 repository which can be used for Ubuntu as well.  To install FRR from this
 repository, install curl first
+
 ```
 sudo apt install curl
 ```
+
 and follow [these instructions]((https://deb.frrouting.org/)).
