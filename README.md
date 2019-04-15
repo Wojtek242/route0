@@ -84,6 +84,21 @@ a different operating system you will have to use some form of virtualisation.
 With some effort (and limitations) you might be able to get things running on
 other Unix-like systems, but that is undocumented.
 
+### Lessons
+
+The lessons in this repository are aimed to take somebody who knows nothing
+about IP routing all the way to setting up networks with multiple autonomous
+systems and VPN tunnels.  The lessons are structured in such a way that the
+reader must first manually setup and configure the network before moving on to
+the next step.  Each stage starts at a point that can be automatically
+provisioned by Route 0 and the purpose of each lesson is to explain how this
+automation is achieved through network configuration.  This particular
+structure also means that it is possible to dive in at any point making it
+suitable for people with more experience as well.
+
+The table of contents with links to all the lessons can be found in the
+[lessons directory](lessons).
+
 ### Running an experiment
 
 If you just want to get started, choose a topology from the `topology`
@@ -113,21 +128,6 @@ sudo python attach.py --node <node_name> --daemon <daemon_name>
 ```
 
 The password for all daemons is `route0`.
-
-### Lessons
-
-The lessons in this repository are aimed to take somebody who knows nothing
-about IP routing all the way to setting up networks with multiple autonomous
-systems and VPN tunnels.  The lessons are structured in such a way that the
-reader must first manually setup and configure the network before moving on to
-the next step.  Each stage starts at a point that can be automatically
-provisioned by Route 0 and the purpose of each lesson is to explain how this
-automation is achieved through network configuration.  This particular
-structure also means that it is possible to dive in at any point making it
-suitable for people with more experience as well.
-
-The table of contents with links to all the lessons can be found in the
-[lessons directory](lessons).
 
 ## Mininet Concepts
 
