@@ -5,6 +5,10 @@ It uses the [Free Range Routing (FRR)](https://frrouting.org/) protocol
 implementations running on top of a network setup locally using
 [Mininet](http://mininet.org/).
 
+This project was inspired by [Vimal Kumar's BGP hijacking
+demo](https://bitbucket.org/jvimal/bgp) from the [Mininet
+Wiki](https://github.com/mininet/mininet/wiki/BGP-Path-Hijacking-Attack-Demo).
+
 ## Introduction
 
 ### Motivation
@@ -219,12 +223,14 @@ additionally starts up `zebra` and `staticd` to configure addresses and default
 routes.
 
 Scenarios are defined for a particular topology and thus they can be found in
-the `scenario` directory within the topology directories.  There is no python
-code associated with a scenario, only FRR configuration files.  Each scenario
+the `scenario` directory within the topology directories.  Each scenario
 (excluding the special ones) should have a directory in the `scenario`
 directory.  Within the particular scenario directory, each daemon that is to be
 run must have a its own directory.  The configuration files should be created
 in the appropriate daemon directory with the name `<node_name>.conf`.
+Scenarios may also have an optional `scenario.py` file for a given scenario in
+which a `script` function should be defined.  This function is then run after
+Mininet and FRR are started and just before handing control over to the user.
 
 The `zebra` and `staticd` daemons are special and have their own directories
 directly in the topology directory.  If a scenario has its own `zebra` and/or
