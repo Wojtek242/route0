@@ -4,3 +4,7 @@
 * [IP Addresses and Subnets](ip-addresses-and-subnets.md)
 * [Configuring Zebra and STATIC](configuring-zebra-and-static.md)
 * [Forwarding between Routers](forwarding-between-routers.md)
+
+# Extra content
+
+* [BGP hijacking demo](../topology/line_03_and_rogue/scenario/bgp_hijack/README.md)
