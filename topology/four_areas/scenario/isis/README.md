@@ -129,8 +129,8 @@ Interface | Name    | Address/Subnet
 Interface | Name    | Address/Subnet
 ----------|---------|---------------
 0         | lo      | -
-1         | R8-eth1 | Level-2
-2         | R8-eth2 | Level-1-2
+1         | R8-eth1 | Level-1-2
+2         | R8-eth2 | Level-2
 3         | R8-eth3 | Level-1
 
 ## Area 4

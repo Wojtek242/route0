@@ -13,6 +13,8 @@ Adding a new topology is straightforward.
 1. Create a new directory in the `topology` directory.
 2. Create a `topo.py` file and define a class `NetTopo` that inherits from
    `mininet.topo.Topo` and build your new topology in its constructor.
+   `WARNING:` Mininet will number the interfaces according to the order they
+   are added to a given node.  Make sure the `README.md` reflects this.
 3. Create a `zebra` directory and populate it with configuration files for the
    `zebra` daemon to configure the interfaces in your topology.
 4. Create a `staticd` directory and populate it with configuration files for
