@@ -4,6 +4,7 @@
 * [IP Addresses and Subnets](ip-addresses-and-subnets.md)
 * [Configuring Zebra and STATIC](configuring-zebra-and-static.md)
 * [Forwarding between Routers](forwarding-between-routers.md)
+* [Routing Protocol Basics](routing-protocol-basics.md)
 
 # Extra content
 
