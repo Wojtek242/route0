@@ -113,3 +113,12 @@ sudo apt install curl
 ```
 
 and follow [these instructions]((https://deb.frrouting.org/)).
+
+### Additional tools
+
+The above instructions will miss some useful tools which are good to have when
+building and troubleshooting networks.  To install them run
+
+```
+sudo apt install traceroute
+```
