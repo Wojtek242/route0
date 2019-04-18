@@ -55,7 +55,7 @@ provisioned, and brought up on a single computer (mostly thanks to Mininet).
 For the best experience it is recommended to run Route 0 experiments using the
 Virtual Machine (VM) image developed specifically for this project.
 
-1. [Download the ova file](https://drive.google.com/open?id=1mlovQSG-xYbBFboqUwKugpQrQNCEoWzd).
+1. [Download the ova file](https://drive.google.com/open?id=1safkEvyujpN9liJ9WrCgzbVQTz287C46).
 2. In VirtualBox select `File->Import Appliance`, select the downloaded ova
    file and then confirm all the settings.  You may adjust the settings, but
    the defaults will work just fine.
