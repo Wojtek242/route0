@@ -112,7 +112,7 @@ repository, install curl first
 sudo apt install curl
 ```
 
-and follow [these instructions]((https://deb.frrouting.org/)).
+and follow [these instructions](https://deb.frrouting.org/).
 
 ### Additional tools
 
